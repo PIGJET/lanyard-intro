@@ -1,0 +1,247 @@
+/* Brutalist gray portfolio (reference: srg.ava-digital.site). Scrolls in its own
+   fixed container so the intro's body { overflow: hidden } stays untouched. */
+
+.portfolio {
+  --pf-bg: #c8c8c3;
+  --pf-ink: #161616;
+  --pf-dim: #5d5d57;
+  --pf-red: #c33d26;
+  --pf-line: #a3a39b;
+  --pf-mono: ui-monospace, 'Cascadia Mono', 'JetBrains Mono', Consolas, monospace;
+  --pf-disp: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--pf-bg);
+  color: var(--pf-ink);
+  font-family: var(--pf-mono);
+  user-select: text;
+  -webkit-user-select: text;
+  z-index: 5;
+  animation: pfIn 0.7s ease both;
+  scroll-behavior: smooth;
+}
+@keyframes pfIn { from { opacity: 0; } }
+
+/* hand canvas pinned behind everything */
+.pf-hand-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── fixed chrome ─────────────────────────────────────────────── */
+.pf-meta {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 16px 24px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  z-index: 3;
+  color: var(--pf-ink);
+}
+.pf-meta a { color: inherit; text-decoration: none; }
+.pf-meta a:hover { color: var(--pf-red); }
+.pf-meta-mark { font-weight: 700; }
+
+.pf-letters {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 3;
+}
+.pf-letter {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--pf-dim);
+  opacity: 0.45;
+  transition: all 0.25s ease;
+}
+.pf-letter.done { opacity: 0.8; color: var(--pf-ink); }
+.pf-letter.on {
+  opacity: 1;
+  color: var(--pf-red);
+  transform: scale(1.5);
+}
+.pf-letters-note {
+  margin-top: 10px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--pf-dim);
+  writing-mode: vertical-rl;
+}
+
+/* ── sections ─────────────────────────────────────────────────── */
+.pf-section {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14vh 6vw;
+  max-width: 100%;
+}
+
+.pf-h2 {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--pf-ink);
+  margin: 0 0 4vh;
+}
+.pf-tag { font-size: 12px; letter-spacing: 0.16em; margin-bottom: 2vh; color: var(--pf-dim); }
+
+/* hero */
+.pf-display {
+  font-family: var(--pf-disp);
+  font-size: clamp(3.2rem, 12vw, 9.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  margin: 0;
+}
+.pf-role {
+  font-size: clamp(0.8rem, 1.6vw, 1rem);
+  letter-spacing: 0.3em;
+  margin: 2.5vh 0 0;
+  color: var(--pf-red);
+  font-weight: 700;
+}
+.pf-tagline { max-width: 34ch; color: var(--pf-dim); font-size: 0.95rem; line-height: 1.7; }
+.pf-scrollhint {
+  position: absolute;
+  bottom: 4vh; left: 6vw;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--pf-dim);
+  animation: pfHint 2.4s ease-in-out infinite;
+}
+@keyframes pfHint { 50% { opacity: 0.35; } }
+
+/* about */
+.pf-about-copy { max-width: 44ch; }
+.pf-about-copy p { line-height: 1.9; font-size: 1rem; margin: 0 0 1.4em; }
+
+/* projects */
+.pf-worklist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--pf-line); }
+.pf-work {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto auto;
+  grid-template-areas: 'idx title tags year' '. desc desc desc';
+  gap: 4px 24px;
+  align-items: baseline;
+  padding: 22px 8px;
+  border-bottom: 1px solid var(--pf-line);
+  transition: background 0.15s, color 0.15s;
+}
+.pf-work:hover { background: var(--pf-ink); color: var(--pf-bg); }
+.pf-work:hover .pf-work-idx, .pf-work:hover .pf-work-desc { color: var(--pf-bg); opacity: 0.7; }
+.pf-work-idx { grid-area: idx; color: var(--pf-red); font-size: 0.8rem; }
+.pf-work-title { grid-area: title; font-family: var(--pf-disp); font-weight: 900; font-size: clamp(1.3rem, 3.4vw, 2.4rem); letter-spacing: -0.01em; }
+.pf-work-tags { grid-area: tags; font-size: 0.7rem; letter-spacing: 0.14em; }
+.pf-work-year { grid-area: year; font-size: 0.7rem; letter-spacing: 0.14em; }
+.pf-work-desc { grid-area: desc; font-size: 0.85rem; color: var(--pf-dim); line-height: 1.6; max-width: 60ch; }
+
+/* stack — sliding window */
+.pf-stack { justify-content: center; padding-left: 0; padding-right: 0; }
+.pf-stack .pf-h2 { padding: 0 6vw; }
+.pf-marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--pf-line);
+  white-space: nowrap;
+}
+.pf-marquee:last-of-type { border-bottom: 1px solid var(--pf-line); }
+.pf-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  padding: 14px 0;
+  animation: pfSlide linear infinite;
+}
+.pf-marquee-track.rev { animation-direction: reverse; }
+.pf-marquee:hover .pf-marquee-track { animation-play-state: paused; }
+@keyframes pfSlide { to { transform: translateX(-50%); } }
+.pf-mq-item {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--pf-disp);
+  font-weight: 900;
+  font-size: clamp(2rem, 5.5vw, 4.2rem);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.pf-mq-star {
+  color: var(--pf-red);
+  font-size: 0.5em;
+  margin: 0 0.9em;
+}
+
+/* footer */
+.pf-footer { padding: 10vh 6vw 6vh; }
+.pf-love { display: flex; gap: 0.4em; margin-bottom: 4vh; }
+.pf-love span {
+  font-family: var(--pf-disp);
+  font-weight: 900;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--pf-red);
+}
+.pf-footer-mail {
+  display: inline-block;
+  font-family: var(--pf-disp);
+  font-weight: 900;
+  font-size: clamp(1.2rem, 4vw, 3rem);
+  color: var(--pf-ink);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  margin-bottom: 3vh;
+}
+.pf-footer-mail:hover { color: var(--pf-red); }
+.pf-socials { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; margin-bottom: 5vh; }
+.pf-socials a, .pf-back {
+  font-family: var(--pf-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--pf-ink);
+  text-decoration: none;
+}
+.pf-socials a:hover { color: var(--pf-red); }
+.pf-back {
+  background: none;
+  border: 1px solid var(--pf-line);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pf-back:hover { background: var(--pf-ink); color: var(--pf-bg); border-color: var(--pf-ink); }
+.pf-fine { font-size: 10px; letter-spacing: 0.16em; color: var(--pf-dim); }
+
+/* ── responsive / motion ──────────────────────────────────────── */
+@media (max-width: 720px) {
+  .pf-meta { font-size: 9px; padding: 12px 14px; gap: 10px; }
+  .pf-letters { right: 10px; }
+  .pf-section { padding: 12vh 7vw; }
+  .pf-work {
+    grid-template-columns: 2.2rem 1fr;
+    grid-template-areas: 'idx title' 'idx tags' '. desc' '. year';
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio { scroll-behavior: auto; animation: none; }
+  .pf-scrollhint { animation: none; }
+  /* the sliding window degrades to a hand-scrollable strip */
+  .pf-marquee { overflow-x: auto; }
+  .pf-marquee-track { animation: none; }
+}

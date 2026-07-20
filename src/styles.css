@@ -1,0 +1,107 @@
+/* Intro game HUD. Scene canvas sits fixed behind; HUD floats above. */
+:root {
+  --bg: #0d0f14;
+  --ink: #e8eaf0;
+  --dim: #8b93a7;
+  --accent: #ffd166;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(120% 90% at 50% 0%, #171b26 0%, var(--bg) 60%);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.hud { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+.hud button { pointer-events: auto; }
+
+/* counter */
+.hud-counter {
+  position: absolute; top: 20px; left: 24px;
+  display: flex; align-items: baseline; gap: 8px;
+  transition: transform 0.12s ease-out;
+}
+.hud-counter.pop { transform: scale(1.22) rotate(-2deg); }
+.hud-counter-num {
+  font-size: 2.4rem; font-weight: 800; font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.hud-counter-label { font-size: 0.9rem; color: var(--dim); letter-spacing: 0.08em; }
+
+/* first-visit hint */
+.hud-hint {
+  position: absolute; bottom: 12vh; left: 50%; transform: translateX(-50%);
+  color: var(--dim); font-size: 0.95rem; letter-spacing: 0.04em;
+  animation: hintPulse 2.4s ease-in-out infinite;
+}
+@keyframes hintPulse { 50% { opacity: 0.35; } }
+
+/* encouragement toast */
+.hud-toast {
+  position: absolute; top: 18%; left: 50%; transform: translateX(-50%);
+  font-size: 1.3rem; font-weight: 700; color: var(--ink);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  animation: toastIn 1.6s ease-out forwards;
+}
+@keyframes toastIn {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.9); }
+  12% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.05); }
+  20% { transform: translateX(-50%) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+}
+
+/* skip: low-opacity "skip cutscene" style */
+.hud-skip {
+  position: absolute; bottom: 24px; right: 28px;
+  background: none; border: 1px solid rgba(232,234,240,0.25);
+  color: rgba(232,234,240,0.55);
+  padding: 8px 18px; border-radius: 999px;
+  font-size: 0.85rem; letter-spacing: 0.1em; cursor: pointer;
+  opacity: 0; animation: skipIn 0.8s ease-out 0.2s forwards;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hud-skip:hover, .hud-skip:focus-visible { color: var(--ink); border-color: rgba(232,234,240,0.6); }
+.hud-skip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@keyframes skipIn { to { opacity: 0.75; } }
+
+/* unlock CTA */
+.hud-cta {
+  position: absolute; bottom: 6vh; left: 50%; transform: translateX(-50%);
+  text-align: center; animation: ctaIn 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+}
+@keyframes ctaIn { from { opacity: 0; transform: translateX(-50%) translateY(16px); } }
+.hud-enter {
+  background: var(--accent); color: #1a1406; border: none;
+  font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em;
+  padding: 14px 34px; border-radius: 999px; cursor: pointer;
+  box-shadow: 0 6px 30px rgba(255, 209, 102, 0.35);
+  transition: transform 0.12s ease-out;
+}
+.hud-enter:hover { transform: translateY(-2px) scale(1.03); }
+.hud-enter:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.hud-cta-sub { margin-top: 10px; color: var(--dim); font-size: 0.8rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-counter, .hud-enter, .hud-toast, .hud-skip, .hud-cta, .hud-hint { animation: none; transition: none; opacity: 1; }
+}
+
+/* scene loading state */
+.scene-loader {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  color: var(--dim); font-size: 0.85rem; letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+.scene-loader-dot {
+  position: absolute; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); transform: translateY(-28px);
+  animation: loaderPulse 1s ease-in-out infinite;
+}
+@keyframes loaderPulse { 50% { opacity: 0.25; transform: translateY(-28px) scale(0.7); } }
+@media (prefers-reduced-motion: reduce) { .scene-loader-dot { animation: none; } }
