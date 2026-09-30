@@ -48,7 +48,3 @@ Useful checks:
 npm test
 npm run build
 ```
-
-## Video walkthrough
-
-> 🎬 **Coming soon** — reserved for a recording of the cutting interaction, unlock flow, and portfolio transition.
